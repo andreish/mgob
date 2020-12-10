@@ -29,7 +29,12 @@ type slackAttachment struct {
 	MrkdwnIn []string `json:"mrkdwn_in"`
 }
 
-func sendSlackNotification(subject string, body string, warn bool, cfg *config.Slack) error {
+type SlackNotificator struct {
+	*config.Slack
+}
+
+func (cfg *SlackNotificator) sendNotification(planID string, subject string, body string, warn bool) error {
+
 	if !warn && cfg.WarnOnly {
 		return nil
 	}

@@ -40,7 +40,7 @@ func postBackup(w http.ResponseWriter, r *http.Request) {
 	res, err := backup.Run(plan, &cfg)
 	if err != nil {
 		log.WithField("plan", planID).Errorf("On demand backup failed %v", err)
-		if err := notifier.SendNotification(fmt.Sprintf("%v on demand backup failed", planID),
+		if err := notifier.SendNotification(planID, fmt.Sprintf("%v on demand backup failed", planID),
 			err.Error(), true, plan); err != nil {
 			log.WithField("plan", plan.Name).Errorf("Notifier failed for on demand backup %v", err)
 		}
@@ -49,7 +49,7 @@ func postBackup(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.WithField("plan", plan.Name).Infof("On demand backup finished in %v archive %v size %v",
 			res.Duration, res.Name, humanize.Bytes(uint64(res.Size)))
-		if err := notifier.SendNotification(fmt.Sprintf("%v on demand backup finished", plan.Name),
+		if err := notifier.SendNotification(planID, fmt.Sprintf("%v on demand backup finished", plan.Name),
 			fmt.Sprintf("%v backup finished in %v archive size %v",
 				res.Name, res.Duration, humanize.Bytes(uint64(res.Size))),
 			false, plan); err != nil {

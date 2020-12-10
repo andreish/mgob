@@ -7,10 +7,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/stefanprodan/mgob/pkg/config"
+	cfg "github.com/stefanprodan/mgob/pkg/config"
 )
+type SmtpNotificator struct {
+	*cfg.SMTP
+}
 
-func sendEmailNotification(subject string, body string, config *config.SMTP) error {
+func (config *SmtpNotificator) sendNotification(planID string, subject string, body string, warn bool) error {
 
 	msg := "From: \"MGOB\" <" + config.From + ">\r\n" +
 		"To: " + strings.Join(config.To, ", ") + "\r\n" +
